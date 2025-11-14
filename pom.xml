@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <!-- Versión del modelo POM que estamos usando -->
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Identificación del proyecto -->
+  <!-- El groupId es como el "apellido" del proyecto, normalmente el dominio invertido -->
+  <groupId>com.example</groupId>
+  
+  <!-- El artifactId es el nombre específico de este proyecto -->
+  <artifactId>jdbc-dao-pattern</artifactId>
+  
+  <!-- La versión de tu proyecto. SNAPSHOT indica que está en desarrollo -->
+  <version>1.0-SNAPSHOT</version>
+  
+  <!-- Información descriptiva del proyecto -->
+  <name>JDBC DAO Pattern Example</name>
+  <description>Proyecto educativo que implementa el patrón DAO con JDBC y MySQL</description>
+
+  <!-- Propiedades que configuran cómo se compila el proyecto -->
+  <properties>
+    <!-- Le decimos a Maven que use Java 17 tanto para compilar como para ejecutar -->
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    
+    <!-- Codificación de caracteres para evitar problemas con acentos y símbolos -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <!-- Dependencias externas que necesita nuestro proyecto -->
+  <dependencies>
+    
+    <!-- MySQL Connector/J: el driver JDBC para conectarnos a MySQL -->
+    <!-- Esta librería contiene las clases que implementan las interfaces JDBC -->
+    <!-- específicamente para trabajar con bases de datos MySQL -->
+    <dependency>
+      <groupId>com.mysql</groupId>
+      <artifactId>mysql-connector-j</artifactId>
+      <version>8.1.0</version>
+      <!-- Scope runtime significa que la necesitamos cuando ejecutamos, 
+           pero no para compilar (aunque en JDBC sí la necesitamos para ambas) -->
+    </dependency>
+    
+  </dependencies>
+
+  <!-- Configuración de plugins que extienden las capacidades de Maven -->
+  <build>
+    <plugins>
+      
+      <!-- Plugin para compilar el código Java -->
+      <!-- Aunque Maven ya sabe compilar Java, este plugin da más control -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version>
+        <configuration>
+          <!-- Confirmamos que queremos usar Java 17 -->
+          <source>17</source>
+          <target>17</target>
+        </configuration>
+      </plugin>
+      
+      <!-- Plugin exec para ejecutar clases Java directamente desde Maven -->
+      <!-- Este plugin es muy conveniente para proyectos educativos porque -->
+      <!-- te permite ejecutar tu aplicación con un simple comando mvn -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <!-- Clase principal por defecto que se ejecutará con mvn exec:java -->
+          <mainClass>com.example.EmpleadoApp</mainClass>
+        </configuration>
+        
+        <!-- Definimos múltiples ejecuciones para poder ejecutar diferentes clases -->
+        <executions>
+          
+          <!-- Ejecución de la aplicación principal -->
+          <execution>
+            <id>run-main-app</id>
+            <configuration>
+              <mainClass>com.example.EmpleadoApp</mainClass>
+            </configuration>
+          </execution>
+          
+          <!-- Ejecución de la aplicación con Factory -->
+          <execution>
+            <id>run-factory-app</id>
+            <configuration>
+              <mainClass>com.example.EmpleadoAppConFactory</mainClass>
+            </configuration>
+          </execution>
+          
+        </executions>
+      </plugin>
+      
+      <!-- Plugin para crear un JAR ejecutable -->
+      <!-- Esto es útil si quieres distribuir tu aplicación como un archivo .jar -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <!-- Indica que queremos agregar información del classpath al JAR -->
+              <addClasspath>true</addClasspath>
+              <!-- Define la clase principal que se ejecutará cuando -->
+              <!-- hagas: java -jar jdbc-dao-pattern-1.0-SNAPSHOT.jar -->
+              <mainClass>com.example.EmpleadoApp</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      
+    </plugins>
+  </build>
+
+</project>
